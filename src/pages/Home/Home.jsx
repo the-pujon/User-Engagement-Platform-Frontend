@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
+import {useUser} from "../../hooks/useUser";
+//import { useUser } from "../../hooks/useUser";
 
 const Home = () => {
   const [missions, setMissions] = useState([]);
@@ -8,6 +10,7 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const [totalQuestions, setTotalQuestions] = useState(0);
   const [refresh, setRefresh] = useState(false);
+  const { user } = useUser();
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_BASE_URL}/api/mission`)
@@ -20,12 +23,11 @@ const Home = () => {
       });
   }, [refresh]);
 
-
   //for deleting mission
   const handleDelete = (id) => {
     console.log(id);
 
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem("token");
 
     fetch(`${import.meta.env.VITE_BASE_URL}/api/mission/${id}`, {
       method: "DELETE",
@@ -35,8 +37,8 @@ const Home = () => {
       },
     })
       .then((res) => {
-
-        return res.json()})
+        return res.json();
+      })
       .then((data) => {
         console.log(data);
         setRefresh(true);
@@ -59,9 +61,23 @@ const Home = () => {
     setMissions(missionSearch);
   }, [search]);
 
+  const handleLogout = () =>{
+    localStorage.removeItem("token")
+    localStorage.removeItem("token")
+  }
+
   return (
     <div className="w-full wrapper my-10">
-      <h1 className="text-6xl font-semibold text-center"> All Mission</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-6xl font-semibold"> All Mission</h1>
+        {user ? (
+          <button className="customButton px-4" onClick={handleLogout}>Logout</button>
+        ) : (
+          <Link to={"/auth/login"} className="customButton px-4 ">
+            Login
+          </Link>
+        )}
+      </div>
 
       <div className="flex w-full items-center justify-center gap-4">
         <div className="form-control relative my-6 w-full">
@@ -157,19 +173,29 @@ const Home = () => {
                 <td>{mission.status}</td>
                 <td>
                   <div className="flex gap-3">
+                    {user && (
+                      <>
+                        {" "}
+                        <Link
+                          className="text-2xl cursor-pointer"
+                          to={`/editMission/${mission._id}`}
+                        >
+                          <FaEdit />
+                        </Link>
+                        <button
+                          className="text-2xl cursor-pointer"
+                          onClick={() => handleDelete(mission._id)}
+                        >
+                          <FaRegTrashAlt />
+                        </button>
+                      </>
+                    )}
                     <Link
-                     className="text-2xl cursor-pointer"
-                     to={`/editMission/${mission._id}`}
+                      to={`participateMission/${mission._id}`}
+                      className="py-1 px-2 border border-primary"
                     >
-                      <FaEdit />
+                      Participate
                     </Link>
-                    <button
-                      className="text-2xl cursor-pointer"
-                      onClick={() => handleDelete(mission._id)}
-                    >
-                      <FaRegTrashAlt />
-                    </button>
-                    <button>Participate</button>
                   </div>
                 </td>
               </tr>

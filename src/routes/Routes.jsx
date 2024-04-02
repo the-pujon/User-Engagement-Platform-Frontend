@@ -6,6 +6,8 @@ import Main from "../layouts/Main";
 import Home from "../pages/Home/Home";
 import CreateMission from "../pages/Home/CreateMission";
 import EditForm from "../pages/Home/EditForm";
+import ParticipateMission from "../pages/Home/ParticipateMission";
+import PrivateRoute from "./privateRoute";
 
 const Routes = createBrowserRouter([
 
@@ -20,11 +22,16 @@ const Routes = createBrowserRouter([
       },
       {
         path: "createMission",
-        element: <CreateMission/>
+        element: <PrivateRoute><CreateMission/></PrivateRoute>
       },
       {
         path: "editMission/:id",
-        element: <EditForm/>
+        element: <PrivateRoute><EditForm/></PrivateRoute>
+      },
+      {
+        path: "participateMission/:id",
+        element: <ParticipateMission/>
+
       }
     ],
   },
