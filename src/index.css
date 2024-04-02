@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.wrapper {
+    @apply max-w-screen-2xl mx-auto px-2 md:px-5;
+  }
+
+.customButton{
+    @apply bg-primary py-2 text-white hover:bg-secondary transition-all duration-300
+}
+
+  :root {
+    background-image: linear-gradient(to top, #234c73 -70%, #ffffff 100%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    scroll-behavior: smooth;
+  }
