@@ -71,6 +71,7 @@ const Home = () => {
 
   return (
     <div className="w-full wrapper my-10">
+      <h1 className="text-6xl text-center font-semibold my-2" >User Engagement Platform</h1>
       <div className="flex justify-between items-center">
         <h1 className="text-6xl font-semibold"> All Mission</h1>
         {user ? (
