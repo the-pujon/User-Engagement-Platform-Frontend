@@ -20,14 +20,18 @@ const Home = () => {
       });
   }, [refresh]);
 
+
+  //for deleting mission
   const handleDelete = (id) => {
     console.log(id);
+
+    const token = localStorage.getItem("token")
 
     fetch(`${import.meta.env.VITE_BASE_URL}/api/mission/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjBjNDEwNzgxZmQ3NmYyMDcxNzk2YzIiLCJpYXQiOjE3MTIwNzkxMTEsImV4cCI6MTcxMjE2NTUxMX0.4cCysPKNwjPfkD7rKIxxquq8gXjiFt6U0VWPuA0drdE`, // Include your authorization token here if required
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => {
@@ -153,9 +157,12 @@ const Home = () => {
                 <td>{mission.status}</td>
                 <td>
                   <div className="flex gap-3">
-                    <button>
+                    <Link
+                     className="text-2xl cursor-pointer"
+                     to={`/editMission/${mission._id}`}
+                    >
                       <FaEdit />
-                    </button>
+                    </Link>
                     <button
                       className="text-2xl cursor-pointer"
                       onClick={() => handleDelete(mission._id)}

@@ -5,6 +5,7 @@ import Signup from "../pages/auth/Signup";
 import Main from "../layouts/Main";
 import Home from "../pages/Home/Home";
 import CreateMission from "../pages/Home/CreateMission";
+import EditForm from "../pages/Home/EditForm";
 
 const Routes = createBrowserRouter([
 
@@ -20,6 +21,10 @@ const Routes = createBrowserRouter([
       {
         path: "createMission",
         element: <CreateMission/>
+      },
+      {
+        path: "editMission/:id",
+        element: <EditForm/>
       }
     ],
   },
