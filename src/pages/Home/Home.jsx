@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 
 const Home = () => {
   const [missions, setMissions] = useState([]);
+  const [filteredMissions, setFilteredMissions] = useState([]);
+  const [search, setSearch] = useState("")
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_BASE_URL}/api/mission`)
@@ -9,17 +11,41 @@ const Home = () => {
       .then((data) => {
         console.log(data);
         setMissions(data);
+        setFilteredMissions(data);
       });
   }, []);
 
+
+
+  //for search
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+  };
+
+  //for search
+  useEffect(() => {
+    let value = search.toLowerCase();
+    let missionSearch = filteredMissions.filter((data) => {
+      //if (data?.name) {
+        const title = data?.title?.toLowerCase();
+        const createdBy = data?.createdBy?.toLowerCase();
+        return title.startsWith(value) ||  createdBy.startsWith(value);
+      //}
+    });
+    setMissions(missionSearch);
+  }, [search]);
+
+
+
   return (
-    <div className="w-full wrapper">
+    <div className="w-full wrapper my-10">
       <h1 className="text-6xl font-semibold"> All Mission</h1>
 
-      <div>
-        <div className="form-control relative my-6">
+      <div className="flex w-full items-center justify-center gap-4">
+        <div className="form-control relative my-6 w-full">
           <input
             autoComplete="off"
+            onChange={handleChange}
             id="search"
             name="search"
             type="text"
@@ -34,6 +60,30 @@ const Home = () => {
             Search
           </label>
         </div>
+        {/*<button className="customButton w-44">Create New Mission</button>*/}
+
+        {/* Open the modal using document.getElementById('ID').showModal() method */}
+        <button
+           className="customButton w-44"
+          onClick={() => document.getElementById("my_modal_5").showModal()}
+        >
+          Create New Mission
+        </button>
+
+        <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">Hello!</h3>
+            <p className="py-4">
+              Press ESC key or click the button below to close
+            </p>
+            <div className="modal-action">
+              <form method="dialog">
+                {/* if there is a button in form, it will close the modal */}
+                <button className="btn">Close</button>
+              </form>
+            </div>
+          </div>
+        </dialog>
       </div>
 
       <div className="overflow-x-auto w-full">
