@@ -8,7 +8,9 @@ const EditForm = () => {
   const [mission, setMission] = useState({});
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_BASE_URL}/api/mission/${id}`)
+    fetch(`${import.meta.env.VITE_BASE_URL}/api/mission/${id}`,{
+      mode: "no-cors",
+    })
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
@@ -37,6 +39,7 @@ const EditForm = () => {
     const token = localStorage.getItem("token");
 
     fetch(`${import.meta.env.VITE_BASE_URL}/api/mission/${id}`, {
+      mode: "no-cors",
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

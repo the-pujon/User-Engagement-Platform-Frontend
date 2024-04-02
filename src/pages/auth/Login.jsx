@@ -18,7 +18,6 @@ const Login = () => {
 
     console.log(name, username, password);
 
-    console.log(import.meta.env.VITE_BASE_URL);
     login(username, password)
     navigate("/")
   };

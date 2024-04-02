@@ -16,9 +16,6 @@ const Signup = () => {
     const username = form.username.value;
     const password = form.password.value;
 
-    console.log(name, username, password);
-
-    console.log(import.meta.env.VITE_BASE_URL);
     signup(username, password);
     navigate("/")
   };

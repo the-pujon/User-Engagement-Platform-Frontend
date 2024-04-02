@@ -10,6 +10,7 @@ const useAuth = () => {
     console.log(username, password);
 
     fetch(`${import.meta.env.VITE_BASE_URL}/api/user/login`, {
+      mode: "no-cors",
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
@@ -29,6 +30,7 @@ const useAuth = () => {
     console.log(username, password);
 
     fetch(`${import.meta.env.VITE_BASE_URL}/api/user/signup`, {
+      mode: "no-cors",
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),

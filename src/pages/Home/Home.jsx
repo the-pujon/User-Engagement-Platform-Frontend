@@ -13,7 +13,9 @@ const Home = () => {
   const { user } = useUser();
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_BASE_URL}/api/mission`)
+    fetch(`${import.meta.env.VITE_BASE_URL}/api/mission`,{
+      mode: "no-cors",
+    })
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
@@ -30,6 +32,7 @@ const Home = () => {
     const token = localStorage.getItem("token");
 
     fetch(`${import.meta.env.VITE_BASE_URL}/api/mission/${id}`, {
+      mode: "no-cors",
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
