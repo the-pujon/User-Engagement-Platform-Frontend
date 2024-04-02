@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
 
 const Home = () => {
   const [missions, setMissions] = useState([]);
   const [filteredMissions, setFilteredMissions] = useState([]);
-  const [search, setSearch] = useState("")
+  const [search, setSearch] = useState("");
+  const [totalQuestions, setTotalQuestions] = useState(0);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_BASE_URL}/api/mission`)
@@ -12,10 +16,28 @@ const Home = () => {
         console.log(data);
         setMissions(data);
         setFilteredMissions(data);
+        setRefresh(false);
       });
-  }, []);
+  }, [refresh]);
 
+  const handleDelete = (id) => {
+    console.log(id);
 
+    fetch(`${import.meta.env.VITE_BASE_URL}/api/mission/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjBjNDEwNzgxZmQ3NmYyMDcxNzk2YzIiLCJpYXQiOjE3MTIwNzkxMTEsImV4cCI6MTcxMjE2NTUxMX0.4cCysPKNwjPfkD7rKIxxquq8gXjiFt6U0VWPuA0drdE`, // Include your authorization token here if required
+      },
+    })
+      .then((res) => {
+
+        return res.json()})
+      .then((data) => {
+        console.log(data);
+        setRefresh(true);
+      });
+  };
 
   //for search
   const handleChange = (e) => {
@@ -26,20 +48,16 @@ const Home = () => {
   useEffect(() => {
     let value = search.toLowerCase();
     let missionSearch = filteredMissions.filter((data) => {
-      //if (data?.name) {
-        const title = data?.title?.toLowerCase();
-        const createdBy = data?.createdBy?.toLowerCase();
-        return title.startsWith(value) ||  createdBy.startsWith(value);
-      //}
+      const title = data?.title?.toLowerCase();
+      const createdBy = data?.createdBy?.toLowerCase();
+      return title.startsWith(value) || createdBy.startsWith(value);
     });
     setMissions(missionSearch);
   }, [search]);
 
-
-
   return (
     <div className="w-full wrapper my-10">
-      <h1 className="text-6xl font-semibold"> All Mission</h1>
+      <h1 className="text-6xl font-semibold text-center"> All Mission</h1>
 
       <div className="flex w-full items-center justify-center gap-4">
         <div className="form-control relative my-6 w-full">
@@ -64,25 +82,53 @@ const Home = () => {
 
         {/* Open the modal using document.getElementById('ID').showModal() method */}
         <button
-           className="customButton w-44"
+          className="customButton w-44"
           onClick={() => document.getElementById("my_modal_5").showModal()}
         >
           Create New Mission
         </button>
 
         <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
-          <div className="modal-box">
-            <h3 className="font-bold text-lg">Hello!</h3>
-            <p className="py-4">
-              Press ESC key or click the button below to close
-            </p>
-            <div className="modal-action">
+          <div className="modal-box bg-white !rounded-none">
+            <div className="flex flex-col">
+              <label
+                htmlFor="totalQuestions"
+                className="text-xl text-secondary"
+              >
+                <b>Total Question</b>{" "}
+                <i>
+                  (Please let us know how many questions do you want to add in
+                  your mission)
+                </i>
+              </label>
+              <input
+                type="number"
+                className="text-2xl py-2 px-3 bg-transparent border-b border-primary outline-none"
+                id="totalQuestions"
+                name="totalQuestions"
+                required
+                onChange={(e) => setTotalQuestions(e.target.value)}
+              />
+
+              <Link
+                to="/createMission"
+                state={{ totalQuestions }}
+                className="customButton my-2 w-full text-center"
+              >
+                Proceed
+              </Link>
+
               <form method="dialog">
                 {/* if there is a button in form, it will close the modal */}
-                <button className="btn">Close</button>
+                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                  ✕
+                </button>
               </form>
             </div>
           </div>
+          <form method="dialog" className="modal-backdrop">
+            <button>close</button>
+          </form>
         </dialog>
       </div>
 
@@ -106,9 +152,18 @@ const Home = () => {
                 <td>{mission.createdBy}</td>
                 <td>{mission.status}</td>
                 <td>
-                  <button>Edit</button>
-                  <button>Delete</button>
-                  <button>Participate</button>
+                  <div className="flex gap-3">
+                    <button>
+                      <FaEdit />
+                    </button>
+                    <button
+                      className="text-2xl cursor-pointer"
+                      onClick={() => handleDelete(mission._id)}
+                    >
+                      <FaRegTrashAlt />
+                    </button>
+                    <button>Participate</button>
+                  </div>
                 </td>
               </tr>
             ))}

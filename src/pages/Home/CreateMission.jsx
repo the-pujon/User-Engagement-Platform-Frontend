@@ -1,17 +1,16 @@
 import React, { useState } from "react";
-import {useUser} from "../../hooks/useUser";
+import { useUser } from "../../hooks/useUser";
+import { useLocation } from "react-router-dom";
 
 const CreateMission = () => {
-    const { user } = useUser();
-
-  // State to hold form data
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    type: "",
-    status: "",
-    questions: [],
-  });
+  const location = useLocation();
+  const { user } = useUser();
+  console.log(user);
+  const totalQuestions = Array.from(
+    { length: parseInt(location?.state?.totalQuestions) },
+    (_, i) => i + 1
+  ); //making and array with 1 to totalQuestions number
+  console.log(totalQuestions);
 
   // Function to handle form submission
   const handleSubmit = (e) => {
@@ -22,34 +21,38 @@ const CreateMission = () => {
     const description = form.elements["description"].value;
     const missionType = form.elements["type"].value;
     const status = form.elements["status"].value;
-    const userId = form.elements["userId"].value;
 
-    // Collect questions
     const questions = [];
-    for (let i = 1; i <= 14; i++) {
-      const questionValue = form.elements[`question${i}`].value;
+    totalQuestions.map((q) => {
+      //console.log(q)
+      const questionValue = form.elements[`question${q}`].value;
       questions.push({ question: questionValue });
-    }
+    });
 
 
     fetch(`${import.meta.env.VITE_BASE_URL}/api/mission`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, description, missionType, userId, questions }),
-      })
-      .then((res)=>res.json())
-      .then((data)=>{
-        console.log(data)
-      })
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title,
+        description,
+        missionType,
+        userId: user,
+        questions,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
 
     // Clear the form fields if needed
     form.reset();
-
   };
 
   return (
     <div className="w-full wrapper my-10">
-      <h1 className="text-secondary text-center text-6xl font-semibold">
+      <h1 className="text-secondary text-center text-4xl md:text-5xl lg:text-6xl font-semibold pb-4">
         Create Mission Form
       </h1>
       <form className="w-full" onSubmit={handleSubmit}>
@@ -63,7 +66,7 @@ const CreateMission = () => {
             placeholder="userId"
             disabled
             value={user}
-            />
+          />
           <label
             htmlFor="userId"
             className="absolute left-0 -top-3.5 text-primary text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-primary/70 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-primary peer-focus:text-sm"
@@ -127,6 +130,7 @@ const CreateMission = () => {
           <div className="form-control relative mb-6 w-full">
             <select
               //onChange={handleCategory}
+              disabled
               id="status"
               className="select select-ghost min-w-full max-w-xs border-t-0 border-l-0 border-r-0 rounded-none border-b-2 text-secondary text-sm border-b-secondary/50 outline-none appearance-none"
             >
@@ -141,13 +145,14 @@ const CreateMission = () => {
         </div>
 
         <div>Questions:</div>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map((question, i) => (
+        {totalQuestions.map((question, i) => (
           <div className="flex items-center gap-5 w-full">
+            {console.log(i)}
             <label className="w-10 text-center" htmlFor={`question${i + 1}`}>
               {i + 1}.
             </label>
             <textarea
-              className="border border-primary w-full m-4 bg-transparent py-2 px-5"
+              className="border border-primary w-full m-4 bg-transparent py-2 px-5 outline-none"
               name={`question${i + 1}`}
               id={`question${i + 1}`}
               rows="1"
