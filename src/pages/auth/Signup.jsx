@@ -1,8 +1,28 @@
-import React from 'react'
+import React from "react";
 import signup1 from "../../assets/auth/login2.svg";
-import {Link} from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
+import { useUser } from "../../hooks/useUser";
 
 const Signup = () => {
+  const { signup } = useUser();
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const form = e.target;
+
+    const name = form.name.value;
+    const username = form.username.value;
+    const password = form.password.value;
+
+    console.log(name, username, password);
+
+    console.log(import.meta.env.VITE_BASE_URL);
+    signup(username, password);
+    navigate("/")
+  };
+
   return (
     <>
       <div className="hero min-h-screen bg-none backdrop-blur-sm text-secondary">
@@ -10,10 +30,7 @@ const Signup = () => {
           <img src={signup1} alt="" className="w-full" />
 
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-transparent ">
-            <form
-              //onSubmit={handleSubmit}
-              className="card-body bg-transparent"
-            >
+            <form onSubmit={handleSubmit} className="card-body bg-transparent">
               <div className="text-3xl text-center  font-semibold">
                 Please Register
               </div>
@@ -29,7 +46,7 @@ const Signup = () => {
                 />
                 <label
                   htmlFor="name"
-                 className="absolute left-0 -top-3.5 text-primary text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-primary/70 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-primary peer-focus:text-sm"
+                  className="absolute left-0 -top-3.5 text-primary text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-primary/70 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-primary peer-focus:text-sm"
                 >
                   Name
                 </label>
@@ -47,7 +64,7 @@ const Signup = () => {
                 />
                 <label
                   htmlFor="username"
-                 className="absolute left-0 -top-3.5 text-primary text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-primary/70 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-primary peer-focus:text-sm"
+                  className="absolute left-0 -top-3.5 text-primary text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-primary/70 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-primary peer-focus:text-sm"
                 >
                   User Name
                 </label>
@@ -64,7 +81,7 @@ const Signup = () => {
                 />
                 <label
                   htmlFor="password"
-                 className="absolute left-0 -top-3.5 text-primary text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-primary/70 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-primary peer-focus:text-sm"
+                  className="absolute left-0 -top-3.5 text-primary text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-primary/70 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-primary peer-focus:text-sm"
                 >
                   Password
                 </label>

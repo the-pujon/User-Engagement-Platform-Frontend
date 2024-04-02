@@ -4,8 +4,26 @@ import Login from "../pages/auth/Login";
 import Signup from "../pages/auth/Signup";
 import Main from "../layouts/Main";
 import Home from "../pages/Home/Home";
+import CreateMission from "../pages/Home/CreateMission";
 
 const Routes = createBrowserRouter([
+
+   //home routes
+  {
+    path: "/",
+    element: <Main />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "createMission",
+        element: <CreateMission/>
+      }
+    ],
+  },
+
   //auth routes
   {
     path: "/auth",
@@ -22,17 +40,7 @@ const Routes = createBrowserRouter([
     ],
   },
 
-  //home routes
-  {
-    path: "/",
-    elementL: <Main />,
-    children: [
-      {
-        path: "/",
-        element: <Home />,
-      },
-    ],
-  },
+
 ]);
 
 
